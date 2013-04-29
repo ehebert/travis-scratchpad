@@ -1,0 +1,14 @@
+language: python
+python:
+  - "2.7"
+before_install:
+  - echo "deb     http://www.zwets.com/debs    unstable/" | sudo tee -a /etc/apt/sources.list
+  - echo "deb-src     http://www.zwets.com/debs    unstable/" | sudo tee -a /etc/apt/sources.list
+  - sudo apt-get install gfortran ta-lib-dev
+install:
+  - cat etc/requirements_dev.txt  | grep -v "^#" | grep -v "^$" | grep -v ipython | grep -v nose== | xargs pip install --use-mirrors
+  - etc/ordered_pip.sh etc/requirements.txt
+before_script:
+  - "flake8 zipline tests"
+script:
+  - nosetests
